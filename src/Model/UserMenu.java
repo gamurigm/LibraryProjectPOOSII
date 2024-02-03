@@ -79,13 +79,10 @@ public class UserMenu {
     Usuario usuarioExistente = UserFactory.findUserByEmail(usuarios, email);
 
     if (usuarioExistente == null) {
-        // Establecer la contraseña al crear la instancia de Usuario
         Usuario nuevoUsuario = new Usuario(nombre, direccion, telf, email, password);
 
-        // Agregar el nuevo usuario a la lista existente
         usuarios.add(nuevoUsuario);
 
-        // Guardar la lista actualizada en el JSON
         UserFactory.saveUsersToJson(usuarios);
 
         System.out.println("Registro exitoso. Bienvenido, " + nuevoUsuario.getNombre() + "!");
