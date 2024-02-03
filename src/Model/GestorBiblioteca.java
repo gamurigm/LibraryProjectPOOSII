@@ -17,7 +17,7 @@ public class GestorBiblioteca {
                 .append("autor", "Autor de Prueba")
                 .append("anio", 2022);
            coleccion.insertOne(documentoPrueba);
-            System.out.println("Documento insertado con éxito.");
+            System.out.println("Documento insertado.");
         
       
    

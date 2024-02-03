@@ -10,7 +10,7 @@ public class Conexion {
     
     MongoDatabase baseDatos;
     MongoCollection<Document> coleccion;
-    MongoClient mongoClient;  // Agregado para almacenar el MongoClient
+    MongoClient mongoClient; 
 
     public Conexion(){
         try {
@@ -27,7 +27,7 @@ public class Conexion {
             coleccion = baseDatos.getCollection("prueba");
             System.out.println("Conexion Exitosa");
         } catch (Exception e) {
-            System.err.println("Error al establecer la conexión: " + e.getMessage());
+            System.err.println("Error al establecer la conexion: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -40,11 +40,10 @@ public class Conexion {
         return this.coleccion;
     }
 
-    // Método para cerrar la conexión
     public void cerrarConexion() {
         if (mongoClient != null) {
             mongoClient.close();
-            System.out.println("Conexión cerrada");
+            System.out.println("Conexion cerrada");
         }
     }
 }
