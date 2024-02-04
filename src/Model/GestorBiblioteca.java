@@ -2,6 +2,7 @@ package Model;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import java.time.LocalDate;
 import org.bson.Document;
 
 public class GestorBiblioteca {
@@ -11,14 +12,24 @@ public class GestorBiblioteca {
         Conexion conexion = new Conexion();
          
         MongoDatabase baseDatos = conexion.getBaseDatos();
-        MongoCollection<Document> coleccion = conexion.getColeccion();
+        MongoCollection<Document> coleccion = conexion.getColeccionPrueba();
 
         Document documentoPrueba = new Document("nombre", "Libro de Prueba")
                 .append("autor", "Autor de Prueba")
                 .append("anio", 2022);
            coleccion.insertOne(documentoPrueba);
             System.out.println("Documento insertado.");
-        
+        // En algún lugar de tu código...
+
+MongoCollection<Document> historialCollection = conexion.getColeccionHistorial();
+User usuario = new Usuario("Nombre", "Dirección", "Teléfono", "Correo", "Contraseña");
+Historial historial = new Historial(usuario, historialCollection);
+        Libro libro = null;
+
+// Agregar un préstamo
+historial.agregarPrestamo(libro, LocalDate.now(), LocalDate.now().plusDays(14));
+
+
       
    
 //        ListaLibros listaLibros = inicializarListaLibros();

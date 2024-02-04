@@ -8,9 +8,10 @@ import org.bson.Document;
 
 public class Conexion {
     
-    MongoDatabase baseDatos;
-    MongoCollection<Document> coleccion;
-    MongoClient mongoClient; 
+    private MongoDatabase baseDatos;
+    private MongoCollection<Document> coleccionPrueba;
+    private MongoCollection<Document> coleccionHistorial;
+    private MongoClient mongoClient; 
 
     public Conexion(){
         try {
@@ -24,7 +25,12 @@ public class Conexion {
 
             baseDatos = mongoClient.getDatabase(databaseName);
 
-            coleccion = baseDatos.getCollection("prueba");
+            // Colección "prueba"
+            coleccionPrueba = baseDatos.getCollection("prueba");
+
+            // Colección "historial"
+            coleccionHistorial = baseDatos.getCollection("historial");
+
             System.out.println("Conexion Exitosa");
         } catch (Exception e) {
             System.err.println("Error al establecer la conexion: " + e.getMessage());
@@ -36,8 +42,12 @@ public class Conexion {
         return this.baseDatos;
     }
 
-    public MongoCollection<Document> getColeccion() {
-        return this.coleccion;
+    public MongoCollection<Document> getColeccionPrueba() {
+        return this.coleccionPrueba;
+    }
+
+    public MongoCollection<Document> getColeccionHistorial() {
+        return this.coleccionHistorial;
     }
 
     public void cerrarConexion() {
@@ -45,5 +55,9 @@ public class Conexion {
             mongoClient.close();
             System.out.println("Conexion cerrada");
         }
+    }
+
+    MongoCollection<Document> getColeccion() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

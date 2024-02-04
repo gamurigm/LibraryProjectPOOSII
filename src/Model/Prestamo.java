@@ -1,4 +1,5 @@
 package Model;
+import Model.Usuario;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,8 +53,5 @@ public class Prestamo {
         this.fechaDevolucion = fechaDevolucion;
     }            
 
-    public String toJson() {
-        com.google.gson.Gson gson = new com.google.gson.Gson();
-        return gson.toJson(this);
-    }
+ 
 }
