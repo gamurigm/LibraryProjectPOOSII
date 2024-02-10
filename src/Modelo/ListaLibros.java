@@ -1,88 +1,117 @@
 package Modelo;
 
-import com.google.gson.Gson;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ListaLibros {
 
+    private final MongoCollection<Document> coleccionLibros;
     private final List<Libro> listaLibros;
 
-    public ListaLibros() {
-        this.listaLibros = new ArrayList<>();
+    // Constructor que acepta la colección y la lista de libros
+    public ListaLibros(MongoCollection<Document> coleccionLibros, List<Libro> listaLibros) {
+        this.coleccionLibros = coleccionLibros;
+        this.listaLibros = listaLibros;
     }
 
     public void agregarLibro(Libro libro) {
-        listaLibros.add(libro);
+        Document libroDoc = convertirLibroADocumento(libro);
+        coleccionLibros.insertOne(libroDoc);
     }
 
-    public void mostrarContenido() {
-        System.out.println("Contenido de la lista: ");
-
-        for (Libro libro : listaLibros) {
-            System.out.print(libro.toString());
-        }
-    }
-
-    public void eliminarLibro(Libro libro) {
-        Iterator<Libro> iterator = listaLibros.iterator();
-        while (iterator.hasNext()) {
-            Libro libroActual = iterator.next();
-            if (libroActual.equals(libro)) {
-                iterator.remove();
-                System.out.println("Libro eliminado:\n" + libro.toString());
-                return;
-            }
-        }
-        System.out.println("El libro no se encontro en la lista.");
+    public void eliminarLibro(String titulo) {
+        coleccionLibros.deleteOne(new Document("titulo", titulo));
+        System.out.println("Libro eliminado: " + titulo);
     }
 
     public Libro buscarPorTitulo(String titulo) {
-    for (Libro libro : listaLibros) {
-        if (libro.getTitulo().equalsIgnoreCase(titulo)) {
-            return libro;
+        Document libroDoc = coleccionLibros.find(new Document("titulo", titulo)).first();
+        if (libroDoc != null) {
+            return documentoToLibro(libroDoc);
+        }
+        return null;
+    }
+
+    public ListaLibros buscarPorGenero(String genero) {
+        List<Libro> resultados = new ArrayList<>();
+        for (Document document : coleccionLibros.find(new Document("genero", genero))) {
+            Libro libro = documentoToLibro(document);
+            resultados.add(libro);
+        }
+        return new ListaLibros(coleccionLibros, resultados);
+    }
+
+    public ListaLibros buscarPorAutor(String autor) {
+        List<Libro> resultados = new ArrayList<>();
+        for (Document document : coleccionLibros.find(new Document("autor", autor))) {
+            Libro libro = documentoToLibro(document);
+            resultados.add(libro);
+        }
+        return new ListaLibros(coleccionLibros, resultados);
+    }
+
+    public void guardarLibrosEnArchivo() {
+        String archivoPath = "src/librosprueba1.txt";
+        try (PrintWriter writer = new PrintWriter(new FileWriter(archivoPath))) {
+            for (Document libroDoc : coleccionLibros.find()) {
+                writer.println(libroDoc.toJson());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-    return null;
+
+    public void cargarLibrosDesdeArchivo() {
+        String archivoPath = "src/librosprueba1.txt";
+        List<Document> libros = leerLibrosDesdeArchivo(archivoPath);
+        coleccionLibros.insertMany(libros);
+    }
+
+  private List<Document> leerLibrosDesdeArchivo(String archivoPath) {
+    List<Document> libros = new ArrayList<>();
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(archivoPath))) {
+        String jsonLine;
+        while ((jsonLine = reader.readLine()) != null) {
+            System.out.println("Línea leída: " + jsonLine); // Agrega esta línea para imprimir cada línea
+            Document libroDoc = Document.parse(jsonLine);
+            libros.add(libroDoc);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return libros;
 }
 
 
 
-    public ListaLibros buscarPorGenero(String genero) {
-        ListaLibros resultados = new ListaLibros();
-        for (Libro libro : listaLibros) {
-            if (libro.getGenero().equalsIgnoreCase(genero)) {
-                resultados.agregarLibro(libro);
-            }
-        }
-        return resultados;
+    private Document convertirLibroADocumento(Libro libro) {
+        return new Document("titulo", libro.getTitulo())
+                .append("autor", libro.getAutor())
+                .append("genero", libro.getGenero())
+                .append("disponible", libro.estaDisponible())
+                .append("stock", libro.getStock());
     }
 
-    public ListaLibros buscarPorAutor(String autor) {
-        ListaLibros resultados = new ListaLibros();
-        for (Libro libro : listaLibros) {
-            if (libro.getAutor().equalsIgnoreCase(autor)) {
-                resultados.agregarLibro(libro);
-            }
-        }
-        return resultados;
-    }
+    private Libro documentoToLibro(Document documento) {
+        String titulo = documento.getString("titulo");
+        String autor = documento.getString("autor");
+        String genero = documento.getString("genero");
+        boolean disponible = documento.getBoolean("disponible");
 
-    public String toJson() {
-        Gson gson = new Gson();
-        return gson.toJson(listaLibros);
-    }
+        Libro libro = new Libro(titulo, autor, genero);
+        libro.setDisponible(disponible);
+        libro.setStock(documento.getInteger("stock", 0));
 
-    public static ListaLibros fromJson(String json) {
-        Gson gson = new Gson();
-        Libro[] librosArray = gson.fromJson(json, Libro[].class);
-
-        ListaLibros listaLibros = new ListaLibros();
-        for (Libro libro : librosArray) {
-            listaLibros.agregarLibro(libro);
-        }
-
-        return listaLibros;
+        return libro;
     }
 }

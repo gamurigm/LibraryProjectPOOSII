@@ -2,56 +2,52 @@ package Modelo;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import org.bson.Document;
 
 public class GestorBiblioteca {
 
     public static void main(String[] args) {
-
         Conexion conexion = new Conexion();
-         
+
         MongoDatabase baseDatos = conexion.getBaseDatos();
-        MongoCollection<Document> coleccion = conexion.getColeccionPrueba();
+        MongoCollection<Document> coleccionLibros = baseDatos.getCollection("Libros");
 
-        Document documentoPrueba = new Document("nombre", "Libro de Prueba")
-                .append("autor", "Autor de Prueba")
-                .append("anio", 2022);
-           coleccion.insertOne(documentoPrueba);
-            System.out.println("Documento insertado.");
-        // En algún lugar de tu código...
+        ListaLibros listaLibros = new ListaLibros(coleccionLibros, new ArrayList<>());
 
-MongoCollection<Document> historialCollection = conexion.getColeccionHistorial();
-User usuario = new Usuario("Nombre", "Dirección", "Teléfono", "Correo", "Contraseña");
-Historial historial = new Historial(usuario, historialCollection);
-        Libro libro = null;
+        // Cargar libros desde archivo al inicio si es necesario
+        listaLibros.cargarLibrosDesdeArchivo();
 
-// Agregar un préstamo
-historial.agregarPrestamo(libro, LocalDate.now(), LocalDate.now().plusDays(14));
+        // Ejemplo: Agregar un nuevo libro
+        Libro nuevoLibro = new Libro("Nuevo Libro", "Autor Desconocido", "Fantasía");
+        nuevoLibro.setStock(10);
+        listaLibros.agregarLibro(nuevoLibro);
 
-
-      
-   
-        ListaLibros listaLibros = inicializarListaLibros();
-        MenuLogin.mainMenu(listaLibros);
-        
-    }
-    
-    
-    private static ListaLibros inicializarListaLibros() {
+     
       
 
-        ListaLibros listaLibros = new ListaLibros();
+        // Ejemplo: Buscar libros por género
+        ListaLibros librosFantasia = listaLibros.buscarPorGenero("Fantasía");
+//        librosFantasia.mostrarContenido();
+//
+//        // Ejemplo: Actualizar un libro
+//        Libro libroActualizado = listaLibros.buscarPorTitulo("Nuevo Libro");
+//        if (libroActualizado != null) {
+//            libroActualizado.setStock(15);
+//            listaLibros.actualizarLibro(nuevoLibro, libroActualizado);
+//        }
+//
+//        // Mostrar el contenido actualizado
+//        listaLibros.mostrarContenido();
+//
+//        // Ejemplo: Eliminar un libro
+//        listaLibros.eliminarLibro(nuevoLibro);
+//
+//        // Mostrar el contenido después de la eliminación
+//        listaLibros.mostrarContenido();
 
-        Libro libro1 = new Libro("Cien años de soledad", "Gabriel Garcia Marquez", "Ficcion");
-        Libro libro2 = new Libro("1984", "George Orwell", "");
-        listaLibros.agregarLibro(libro1);
-        listaLibros.agregarLibro(libro2);
-
-        return listaLibros;
-  
+        // Guardar los cambios en el archivo y cerrar la conexión
+        listaLibros.guardarLibrosEnArchivo();
+        conexion.cerrarConexion();
     }
 }
-        
-        
-        

@@ -7,13 +7,12 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 public class Conexion {
-    
-    private MongoDatabase baseDatos;
-    private MongoCollection<Document> coleccionPrueba;
-    private MongoCollection<Document> coleccionHistorial;
-    private MongoClient mongoClient; 
 
-    public Conexion(){
+    private MongoDatabase baseDatos;
+    private MongoCollection<Document> coleccionLibros;
+    private MongoClient mongoClient;
+
+    public Conexion() {
         try {
             String password = "789456123g";
             String clusterUrl = "cluster0.kurfcc8.mongodb.net";
@@ -25,11 +24,8 @@ public class Conexion {
 
             baseDatos = mongoClient.getDatabase(databaseName);
 
-            // Colección "prueba"
-            coleccionPrueba = baseDatos.getCollection("prueba");
-
-            // Colección "historial"
-            coleccionHistorial = baseDatos.getCollection("historial");
+            // Colección "Libros"
+            coleccionLibros = baseDatos.getCollection("Libros");
 
             System.out.println("Conexion Exitosa");
         } catch (Exception e) {
@@ -42,12 +38,8 @@ public class Conexion {
         return this.baseDatos;
     }
 
-    public MongoCollection<Document> getColeccionPrueba() {
-        return this.coleccionPrueba;
-    }
-
-    public MongoCollection<Document> getColeccionHistorial() {
-        return this.coleccionHistorial;
+    public MongoCollection<Document> getColeccionLibros() {
+        return this.coleccionLibros;
     }
 
     public void cerrarConexion() {
@@ -55,9 +47,5 @@ public class Conexion {
             mongoClient.close();
             System.out.println("Conexion cerrada");
         }
-    }
-
-    MongoCollection<Document> getColeccion() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

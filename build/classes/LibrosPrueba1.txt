@@ -1,0 +1,18 @@
+{"_id": {"$oid": "65c6cac2380d706600daa2bd"}, "titulo": "Cien años de soledad", "autor": "Gabriel García Márquez", "genero": "Realismo mágico", "disponible": true}
+{"_id": {"$oid": "65c6cac2380d706600daa2be"}, "titulo": "1984", "autor": "George Orwell", "genero": "Distopía", "disponible": true}
+{"_id": {"$oid": "65c6cac2380d706600daa2bf"}, "titulo": "Don Quijote de la Mancha", "autor": "Miguel de Cervantes", "genero": "Novela picaresca", "disponible": true}
+{"_id": {"$oid": "65c6cac2380d706600daa2c0"}, "titulo": "Orgullo y prejuicio", "autor": "Jane Austen", "genero": "Novela romántica", "disponible": true}
+{"_id": {"$oid": "65c6cac2380d706600daa2c1"}, "titulo": "Harry Potter y la piedra filosofal", "autor": "J.K. Rowling", "genero": "Fantasía", "disponible": true}
+{"_id": {"$oid": "65c6cac5380d706600daa2c2"}, "titulo": "Nuevo Libro", "autor": "Autor Desconocido", "genero": "Fantasía", "disponible": true, "stock": 10}
+{"_id": {"$oid": "65c6d033ab253801932d784c"}, "titulo": "Cien años de soledad", "autor": "Gabriel García Márquez", "genero": "Realismo mágico", "disponible": true}
+{"_id": {"$oid": "65c6d033ab253801932d784d"}, "titulo": "1984", "autor": "George Orwell", "genero": "Distopía", "disponible": true}
+{"_id": {"$oid": "65c6d033ab253801932d784e"}, "titulo": "Don Quijote de la Mancha", "autor": "Miguel de Cervantes", "genero": "Novela picaresca", "disponible": true}
+{"_id": {"$oid": "65c6d033ab253801932d784f"}, "titulo": "Orgullo y prejuicio", "autor": "Jane Austen", "genero": "Novela romántica", "disponible": true}
+{"_id": {"$oid": "65c6d033ab253801932d7850"}, "titulo": "Harry Potter y la piedra filosofal", "autor": "J.K. Rowling", "genero": "Fantasía", "disponible": true}
+{"_id": {"$oid": "65c6d035ab253801932d7851"}, "titulo": "Nuevo Libro", "autor": "Autor Desconocido", "genero": "Fantasía", "disponible": true, "stock": 10}
+{"_id": {"$oid": "65c6d3361c997f195c93f4a2"}, "titulo": "Cien años de soledad", "autor": "Gabriel García Márquez", "genero": "Realismo mágico", "disponible": true, "stock": 10}
+{"_id": {"$oid": "65c6d3361c997f195c93f4a3"}, "titulo": "1984", "autor": "George Orwell", "genero": "Distopía", "disponible": true, "stock": 10}
+{"_id": {"$oid": "65c6d3361c997f195c93f4a4"}, "titulo": "Don Quijote de la Mancha", "autor": "Miguel de Cervantes", "genero": "Novela picaresca", "disponible": true, "stock": 10}
+{"_id": {"$oid": "65c6d3361c997f195c93f4a5"}, "titulo": "Orgullo y prejuicio", "autor": "Jane Austen", "genero": "Novela romántica", "disponible": true, "stock": 10}
+{"_id": {"$oid": "65c6d3361c997f195c93f4a6"}, "titulo": "Harry Potter y la piedra filosofal", "autor": "J.K. Rowling", "genero": "Fantasía", "disponible": true, "stock": 10}
+{"_id": {"$oid": "65c6d3381c997f195c93f4a7"}, "titulo": "Nuevo Libro", "autor": "Autor Desconocido", "genero": "Fantasía", "disponible": true, "stock": 10}
