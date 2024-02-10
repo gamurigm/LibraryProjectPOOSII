@@ -7,9 +7,7 @@ public class Admin extends User {
 
     private static Admin instance;
 
-    public Admin() {
-        super("", "", "", "", "");
-    }
+    public Admin() {}
 
     public static synchronized Admin getInstance() {
         if (instance == null) {
