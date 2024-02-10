@@ -1,10 +1,11 @@
 package Modelo;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Admin extends User {
 
-    private static Admin instance; 
+    private static Admin instance;
 
     private Admin() {
         super("Admin", "Default Address", "Default Phone", "admin@example.com", "123");
@@ -54,5 +55,63 @@ public class Admin extends User {
         System.out.println("Direccion: " + instance.getDireccion());
         System.out.println("Telefono: " + instance.getTelf());
         System.out.println("Correo electronico: " + instance.getEmail());
+    }
+
+    public void agregarLibro(List<Libro> listaLibros, String titulo, String autor, String genero) {
+        if (this.autenticar()) {
+            Libro nuevoLibro = LibroFactory.crearLibro(titulo, autor, genero);
+            listaLibros.add(nuevoLibro);
+            System.out.println("Libro agregado: " + nuevoLibro);
+        } else {
+            System.out.println("Acceso no autorizado para agregar libros.");
+        }
+    }
+
+    public void actualizarLibro(List<Libro> listaLibros, String titulo, String nuevoTitulo, String nuevoAutor, String nuevoGenero) {
+        if (this.autenticar()) {
+            Libro libroActualizado = buscarLibroPorTitulo(listaLibros, titulo);
+            if (libroActualizado != null) {
+                libroActualizado.setTitulo(nuevoTitulo);
+                libroActualizado.setAutor(nuevoAutor);
+                libroActualizado.setGenero(nuevoGenero);
+                System.out.println("Libro actualizado: " + libroActualizado);
+            } else {
+                System.out.println("Libro no encontrado: " + titulo);
+            }
+        } else {
+            System.out.println("Acceso no autorizado para actualizar libros.");
+        }
+    }
+
+    public void eliminarLibro(List<Libro> listaLibros, String titulo) {
+        if (this.autenticar()) {
+            Libro libroEliminado = buscarLibroPorTitulo(listaLibros, titulo);
+            if (libroEliminado != null) {
+                listaLibros.remove(libroEliminado);
+                System.out.println("Libro eliminado: " + libroEliminado);
+            } else {
+                System.out.println("Libro no encontrado: " + titulo);
+            }
+        } else {
+            System.out.println("Acceso no autorizado para eliminar libros.");
+        }
+    }
+
+    private Libro buscarLibroPorTitulo(List<Libro> listaLibros, String titulo) {
+        for (Libro libro : listaLibros) {
+            if (libro.getTitulo().equals(titulo)) {
+                return libro;
+            }
+        }
+        return null;
+    }
+
+    private boolean autenticar() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese su correo electronico:");
+        String correo = scanner.nextLine();
+        System.out.println("Ingrese su contrasenia:");
+        String contrasenia = scanner.nextLine();
+        return this.iniciarSesion(correo, contrasenia);
     }
 }

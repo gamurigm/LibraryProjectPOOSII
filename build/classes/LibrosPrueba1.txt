@@ -16,3 +16,4 @@
 {"_id": {"$oid": "65c6d3361c997f195c93f4a5"}, "titulo": "Orgullo y prejuicio", "autor": "Jane Austen", "genero": "Novela romántica", "disponible": true, "stock": 10}
 {"_id": {"$oid": "65c6d3361c997f195c93f4a6"}, "titulo": "Harry Potter y la piedra filosofal", "autor": "J.K. Rowling", "genero": "Fantasía", "disponible": true, "stock": 10}
 {"_id": {"$oid": "65c6d3381c997f195c93f4a7"}, "titulo": "Nuevo Libro", "autor": "Autor Desconocido", "genero": "Fantasía", "disponible": true, "stock": 10}
+{"_id": {"$oid": "65c6de05ff29582d82f2b61e"}, "titulo": "Nuevo Libro", "autor": "Autor Desconocido", "genero": "Fantasía", "disponible": true, "stock": 10}
