@@ -1,34 +1,38 @@
 package Modelo;
 
+import Modelo.AdminDAO;
+import Controlador.ControladorAdmin;
+import Modelo.Conexion;
+import Vista.FrmAdminLogin;
+import Vista.FrmRegistroAdmin;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.swing.*;
 
 public class GestorBiblioteca {
 
     public static void main(String[] args) {
-        Conexion conexion = new Conexion();
+        SwingUtilities.invokeLater(() -> {
+            try {
+                // Crea la conexión a la base de datos MongoDB
+                Conexion conexion = new Conexion();
+                MongoCollection<Document> adminCollection = conexion.getBaseDatos().getCollection("Admin");
 
-        MongoCollection<Document> coleccionLibros = conexion.getBaseDatos().getCollection("Libros");
+                // Crea el DAO y las vistas
+                AdminDAO adminDAO = new AdminDAO(adminCollection);
+                FrmAdminLogin frmAdminLogin = new FrmAdminLogin();
+                FrmRegistroAdmin frmRegistroAdmin = new FrmRegistroAdmin();
 
-        // Crear una ListaLibros vacía
-        List<Libro> listaLibros = new ArrayList<>();
-        ListaLibros biblioteca = new ListaLibros(coleccionLibros, listaLibros);
+                // Crea el controlador
+                ControladorAdmin controladorAdmin = new ControladorAdmin(frmAdminLogin, frmRegistroAdmin, adminDAO);
 
-        // Cargar libros desde archivo al inicio si es necesario
-        biblioteca.cargarLibrosDesdeArchivo();
+                // Muestra la vista de inicio de sesión
+                frmAdminLogin.setVisible(true);
 
-        // Crear un administrador
-        Admin admin = Admin.getInstance();
-        // Inicializar datos del administrador si aún no se ha hecho
-        Admin.inicializarDatos();
-
-    
-
-        // Guardar los cambios en el archivo y cerrar la conexión
-        biblioteca.guardarLibrosEnArchivo();
-        conexion.cerrarConexion();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

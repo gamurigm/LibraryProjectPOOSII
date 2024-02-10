@@ -7,8 +7,8 @@ public class Admin extends User {
 
     private static Admin instance;
 
-    private Admin() {
-        super("Admin", "Default Address", "Default Phone", "admin@example.com", "123");
+    public Admin() {
+        super("", "", "", "", "");
     }
 
     public static synchronized Admin getInstance() {
@@ -27,34 +27,39 @@ public class Admin extends User {
             String nombre = scanner.nextLine();
             instance.setNombre(nombre);
 
-            System.out.println("Ingrese la direccion del administrador:");
+            System.out.println("Ingrese la dirección del administrador:");
             String direccion = scanner.nextLine();
             instance.setDireccion(direccion);
 
-            System.out.println("Ingrese el telefono del administrador:");
+            System.out.println("Ingrese el teléfono del administrador:");
             String telf = scanner.nextLine();
             instance.setTelf(telf);
 
-            System.out.println("Ingrese el correo electronico del administrador:");
+            System.out.println("Ingrese el correo electrónico del administrador:");
             String email = scanner.nextLine();
             instance.setEmail(email);
 
-            System.out.println("Ingrese la contrasenia del administrador:");
+            System.out.println("Ingrese la contraseña del administrador:");
             String password = scanner.nextLine();
+            // Hashear la contraseña antes de guardarla en producción
             instance.setPassword(password);
 
-            System.out.println("Datos del administrador inicializados con exito.\n");
+            System.out.println("Datos del administrador inicializados con éxito.\n");
         } else {
             System.out.println("Ya se han inicializado los datos del administrador.\n");
         }
     }
 
     public static synchronized void printAdminInfo() {
-        System.out.println("Informacion del Administrador:");
+        System.out.println("Información del Administrador:");
         System.out.println("Nombre: " + instance.getNombre());
-        System.out.println("Direccion: " + instance.getDireccion());
-        System.out.println("Telefono: " + instance.getTelf());
-        System.out.println("Correo electronico: " + instance.getEmail());
+        System.out.println("Dirección: " + instance.getDireccion());
+        System.out.println("Teléfono: " + instance.getTelf());
+        System.out.println("Correo electrónico: " + instance.getEmail());
+    }
+
+    public boolean autenticar(String correo, String contrasena) {
+        return this.getEmail().equals(correo) && this.getPassword().equals(contrasena);
     }
 
     public void agregarLibro(List<Libro> listaLibros, String titulo, String autor, String genero) {
@@ -106,12 +111,15 @@ public class Admin extends User {
         return null;
     }
 
-    private boolean autenticar() {
+    public boolean autenticar() {
         Scanner scanner = new Scanner(System.in);
+
         System.out.println("Ingrese su correo electronico:");
         String correo = scanner.nextLine();
         System.out.println("Ingrese su contrasenia:");
         String contrasenia = scanner.nextLine();
-        return this.iniciarSesion(correo, contrasenia);
+
+        // Verifica si el correo y la contraseña coinciden con las del administrador
+        return this.getEmail().equals(correo) && this.getPassword().equals(contrasenia);
     }
 }
