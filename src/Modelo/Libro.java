@@ -1,6 +1,6 @@
 package Modelo;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
 public class Libro {
 
@@ -65,13 +65,13 @@ public class Libro {
         this.stock = stock;
     }
 
-    public String toJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
+//    public String toJson() {
+//        Gson gson = new Gson();
+//        return gson.toJson(this);
+//    }
 
     public void saveToMongoDB() {
-        LibroDAO libroDAO = new LibroDAO(new Conexion().getColeccionLibros());
+        LibroDAO libroDAO = new LibroDAO(new Conexion().getColeccion("Libros"));
         libroDAO.agregarLibro(this);
     }
 

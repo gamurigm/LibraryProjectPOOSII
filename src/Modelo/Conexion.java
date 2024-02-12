@@ -9,7 +9,6 @@ import org.bson.Document;
 public class Conexion {
 
     private MongoDatabase baseDatos;
-    private MongoCollection<Document> coleccionLibros;
     private MongoClient mongoClient;
 
     public Conexion() {
@@ -24,12 +23,9 @@ public class Conexion {
 
             baseDatos = mongoClient.getDatabase(databaseName);
 
-            // Colección "Libros"
-            coleccionLibros = baseDatos.getCollection("Libros");
-
             System.out.println("Conexion Exitosa");
         } catch (Exception e) {
-            System.err.println("Error al establecer la conexion: " + e.getMessage());
+            System.err.println("Error al establecer la conexión: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -38,8 +34,8 @@ public class Conexion {
         return this.baseDatos;
     }
 
-    public MongoCollection<Document> getColeccionLibros() {
-        return this.coleccionLibros;
+    public MongoCollection<Document> getColeccion(String nombreColeccion) {
+        return baseDatos.getCollection(nombreColeccion);
     }
 
     public void cerrarConexion() {

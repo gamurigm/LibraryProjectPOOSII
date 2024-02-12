@@ -47,20 +47,20 @@ public class ListaUsuarios {
         return null;
     }
 
-    public String toJson() {
-        Gson gson = new Gson();
-        return gson.toJson(listaUsuarios);
-    }
-
-    public static ListaUsuarios fromJson(String json) {
-        Gson gson = new Gson();
-        Usuario[] usuariosArray = gson.fromJson(json, Usuario[].class);
-
-        ListaUsuarios listaUsuarios = new ListaUsuarios();
-        for (Usuario usuario : usuariosArray) {
-            listaUsuarios.agregarUsuario(usuario);
-        }
-
-        return listaUsuarios;
-    }
+//    public String toJson() {
+//        Gson gson = new Gson();
+//        return gson.toJson(listaUsuarios);
+//    }
+//
+//    public static ListaUsuarios fromJson(String json) {
+//        Gson gson = new Gson();
+//        Usuario[] usuariosArray = gson.fromJson(json, Usuario[].class);
+//
+//        ListaUsuarios listaUsuarios = new ListaUsuarios();
+//        for (Usuario usuario : usuariosArray) {
+//            listaUsuarios.agregarUsuario(usuario);
+//        }
+//
+//        return listaUsuarios;
+//    }
 }

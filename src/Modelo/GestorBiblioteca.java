@@ -1,7 +1,9 @@
 package Modelo;
 
 import Controlador.ControladorAdmin;
+import Controlador.ControladorLibros;
 import Vista.FrmAdminLogin;
+import Vista.FrmAeLibros;
 import Vista.FrmRegistroAdmin;
 import Vista.FrmBienvenida;
 import com.mongodb.client.MongoCollection;
@@ -11,44 +13,46 @@ import javax.swing.*;
 
 public class GestorBiblioteca {
 
+    private static Conexion conexion;
+    public static FrmBienvenida frmBienvenida;
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                
-                Conexion conexion = new Conexion();
-                MongoCollection<Document> adminCollection = conexion.getBaseDatos().getCollection("Admin");
+                conexion = new Conexion();
 
-                // Crea el DAO y las vistas
+                MongoCollection<Document> adminCollection = conexion.getBaseDatos().getCollection("Admin");
                 AdminDAO adminDAO = new AdminDAO(adminCollection);
-                FrmBienvenida frmBienvenida = new FrmBienvenida();
+                frmBienvenida = new FrmBienvenida();
+
                 FrmAdminLogin frmAdminLogin = new FrmAdminLogin();
                 FrmRegistroAdmin frmRegistroAdmin = new FrmRegistroAdmin();
 
-                // Crea el controlador
                 ControladorAdmin controladorAdmin = new ControladorAdmin(frmAdminLogin, frmRegistroAdmin, adminDAO);
 
-                // Agrega un ActionListener al botón "Iniciar" en FrmBienvenida
                 frmBienvenida.btnInitAdmin.addActionListener(e -> {
-                    // Muestra la vista de inicio de sesión al hacer clic en el botón "Iniciar"
                     frmAdminLogin.setVisible(true);
-                    // También puedes ocultar la ventana actual si es necesario
                     frmBienvenida.setVisible(false);
                 });
 
-                // Agrega un ActionListener al botón "Registrarse" en FrmAdminLogin
                 frmAdminLogin.btnRegistrarse.addActionListener(e -> {
-                    // Abre la ventana FrmRegistroAdmin al hacer clic en el botón "Registrarse"
                     frmRegistroAdmin.setVisible(true);
-                    // También puedes ocultar la ventana actual si es necesario
                     frmAdminLogin.setVisible(false);
                 });
 
-                // Muestra la vista de bienvenida
                 frmBienvenida.setVisible(true);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    public static void iniciarSesionAdmin(String correo, String contrasenia) {
+        LibroDAO libroDAO = new LibroDAO(conexion.getColeccion("Libros"));
+        FrmAeLibros frmAeLibros = new FrmAeLibros();
+        ControladorLibros controladorLibros = new ControladorLibros(frmAeLibros, libroDAO);
+
+        frmAeLibros.setVisible(true);
     }
 }

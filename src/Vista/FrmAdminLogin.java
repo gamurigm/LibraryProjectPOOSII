@@ -1,16 +1,12 @@
 
 package Vista;
-import Modelo.AdminDAO;
-import javax.accessibility.AccessibleContext;
+import Modelo.GestorBiblioteca;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JRootPane;
 import javax.swing.JTextField;
-import Modelo.AdminDAO;
 
 /**
  *
@@ -18,11 +14,10 @@ import Modelo.AdminDAO;
  */
 public class FrmAdminLogin extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FrmAdminLogin
-     */
+ 
     public FrmAdminLogin() {
         initComponents();
+       
     }
 
     /**
@@ -46,6 +41,7 @@ public class FrmAdminLogin extends javax.swing.JFrame {
         txtPassAdmin = new javax.swing.JPasswordField();
         btnInicioAdmin = new javax.swing.JButton();
         btnRegistrarse = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -124,6 +120,13 @@ public class FrmAdminLogin extends javax.swing.JFrame {
             }
         });
 
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -131,7 +134,9 @@ public class FrmAdminLogin extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(113, 113, 113)
+                        .addContainerGap()
+                        .addComponent(btnRegresar)
+                        .addGap(28, 28, 28)
                         .addComponent(jLabel2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(17, 17, 17)
@@ -160,7 +165,9 @@ public class FrmAdminLogin extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jLabel2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(btnRegresar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addGap(22, 22, 22)
@@ -212,14 +219,20 @@ public class FrmAdminLogin extends javax.swing.JFrame {
     
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+       
+    if (GestorBiblioteca.frmBienvenida != null) {
+        GestorBiblioteca.frmBienvenida.setVisible(true);
+        GestorBiblioteca.frmBienvenida.setLocationRelativeTo(null);
+        this.dispose();
+    }
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
 
     public JButton getBtnRegistrarse() {
         return btnRegistrarse;
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public void setBtnRegistrarse(JButton btnRegistrarse) {
         this.btnRegistrarse = btnRegistrarse;
     }
@@ -318,6 +331,7 @@ public class FrmAdminLogin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnInicioAdmin;
     public javax.swing.JButton btnRegistrarse;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JFrame jFrame2;
     private javax.swing.JFrame jFrame3;
