@@ -15,7 +15,7 @@ public class User {
     private String direccion;
     private String telf;
     private String email;
-    private String password;
+    String password;
     private String creado;
 
     public User() {

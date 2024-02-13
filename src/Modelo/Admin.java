@@ -15,6 +15,11 @@ public class Admin extends User {
         }
         return instance;
     }
+    
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
 
     public static synchronized void inicializarDatos() {
         if (instance == null) {
