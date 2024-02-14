@@ -1,6 +1,7 @@
 package Modelo;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -57,5 +58,29 @@ public class LibroDAO {
         libro.setStock(documento.getInteger("stock", 0));
 
         return libro;
+    }
+    
+        public List<Libro> buscarLibros(String nombre, String autor, String genero, String codigo) {
+        List<Libro> resultados = new ArrayList<>();
+
+        try {
+            Document query = new Document();
+            if (!nombre.isEmpty()) query.append("titulo", new Document("$regex", nombre));
+            if (!autor.isEmpty()) query.append("autor", new Document("$regex", autor));
+            if (!genero.isEmpty()) query.append("genero", new Document("$regex", genero));
+            if (!codigo.isEmpty()) query.append("codigo", Integer.parseInt(codigo));
+
+            try (MongoCursor<Document> cursor = coleccionLibros.find(query).iterator()) {
+                while (cursor.hasNext()) {
+                    Document libroDoc = cursor.next();
+                    Libro libro = documentoToLibro(libroDoc);
+                    resultados.add(libro);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return resultados;
     }
 }

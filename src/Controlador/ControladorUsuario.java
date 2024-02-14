@@ -1,28 +1,40 @@
 package Controlador;
 
 import Modelo.GestorBiblioteca;
+import Modelo.Libro;
+import Modelo.LibroDAO;
 import Modelo.Usuario;
 import Modelo.UsuarioDAO;
+import Vista.FrmBusquedaLibro;
 import Vista.FrmUsuario;
 import Vista.FrmUsuarioLogin;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class ControladorUsuario implements ActionListener {
 
     private final FrmUsuarioLogin viewLoginUsuario;
     private final FrmUsuario viewUsuario;
+    private final FrmBusquedaLibro viewBusqueda;
     private final UsuarioDAO usuarioDAO;
+    private final LibroDAO libroDAO;
+    
 
-    public ControladorUsuario(FrmUsuarioLogin viewLoginUsuario, FrmUsuario viewUsuario, UsuarioDAO usuarioDAO) {
+    public ControladorUsuario(FrmUsuarioLogin viewLoginUsuario, FrmUsuario viewUsuario, FrmBusquedaLibro viewBusqueda, UsuarioDAO usuarioDAO, LibroDAO libroDAO) {
         this.viewLoginUsuario = viewLoginUsuario;
-        this.usuarioDAO = usuarioDAO;
         this.viewUsuario = viewUsuario;
+        this.viewBusqueda = viewBusqueda;
+        this.usuarioDAO = usuarioDAO;
+        this.libroDAO = libroDAO; 
+        
 
         viewLoginUsuario.btnInicioUser.addActionListener(this);
         viewLoginUsuario.btnRegistrarse.addActionListener(this);
         viewUsuario.btnAceptar.addActionListener(this);
+        viewBusqueda.btnBuscar.addActionListener(this);
+        viewBusqueda.btnReservar.addActionListener(this);
     }
 
     @Override
@@ -33,7 +45,22 @@ public class ControladorUsuario implements ActionListener {
             iniciarSesionUsuario();
         } else if (e.getSource().equals(viewLoginUsuario.btnRegistrarse)) {
             abrirFrmUsuario();
-        }
+        } else if (e.getSource() == viewBusqueda.btnBuscar) {
+    // Obtener criterios de búsqueda desde los campos de texto del formulario de búsqueda
+    String nombre = viewBusqueda.txtNombre.getText().trim();
+    String autor = viewBusqueda.txtAutor.getText().trim();
+    String genero = viewBusqueda.txtGenero.getText().trim();
+    String codigo = viewBusqueda.txtCodigo.getText().trim();
+
+    // Validar que al menos un campo de búsqueda no esté vacío
+    if (nombre.isEmpty() && autor.isEmpty() && genero.isEmpty() && codigo.isEmpty()) {
+        JOptionPane.showMessageDialog(viewBusqueda, "Por favor, ingrese al menos un criterio de búsqueda.", "Campos Vacíos", JOptionPane.WARNING_MESSAGE);
+    } else {
+        // Llamar al método del formulario de búsqueda de libros para realizar la búsqueda
+        List<Libro> resultados = libroDAO.buscarLibros(nombre, autor, genero, codigo);
+        viewBusqueda.mostrarResultadosEnTabla(resultados);
+    }
+    }
     }
 
     public void registrarUsuario() {
@@ -72,25 +99,26 @@ public class ControladorUsuario implements ActionListener {
     }
 
     public void iniciarSesionUsuario() {
-        try {
-            String correoUsuario = viewLoginUsuario.txtCorreoLogin.getText();
+    try {
+        String correoUsuario = viewLoginUsuario.txtCorreoLogin.getText();
+        String contraseniaUsuario = viewLoginUsuario.txtContraLogin.getText();
 
-            if (usuarioDAO.existeUsuario(correoUsuario)) {
-                String contraseniaUsuario = viewLoginUsuario.txtContraLogin.getText();
+        if (usuarioDAO.existeUsuario(correoUsuario)) {
+            JOptionPane.showMessageDialog(viewLoginUsuario, "Inicio de sesión exitoso");
+            GestorBiblioteca.iniciarSesionUsuario(correoUsuario, contraseniaUsuario);
+            viewLoginUsuario.setVisible(false);
 
-                if (usuarioDAO.autenticarUsuario(correoUsuario, contraseniaUsuario)) {
-                    JOptionPane.showMessageDialog(viewLoginUsuario, "Inicio de sesión exitoso");
-                    GestorBiblioteca.iniciarSesionUsuario(correoUsuario, contraseniaUsuario);
-                    viewLoginUsuario.setVisible(false);
-                } else {
-                    JOptionPane.showMessageDialog(viewLoginUsuario, "Credenciales incorrectas", "Error de inicio de sesión", JOptionPane.ERROR_MESSAGE);
-                }
-            } else {
-                JOptionPane.showMessageDialog(viewLoginUsuario, "El usuario no existe", "Error de inicio de sesión", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception ex) {
-            System.out.println("Error al iniciar sesión");
-            ex.printStackTrace();
+            // Utilizar la instancia existente de FrmBusquedaLibro
+            viewBusqueda.setVisible(true);
+
+        } else {
+            JOptionPane.showMessageDialog(viewLoginUsuario, "Credenciales incorrectas", "Error de inicio de sesión", JOptionPane.ERROR_MESSAGE);
         }
+    } catch (Exception ex) {
+        System.out.println("Error al iniciar sesión");
+        ex.printStackTrace();
     }
+}
+
+
 }

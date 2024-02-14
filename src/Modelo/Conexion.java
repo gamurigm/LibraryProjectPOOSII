@@ -8,7 +8,7 @@ import org.bson.Document;
 
 public class Conexion {
 
-    private MongoDatabase baseDatos;
+    private static MongoDatabase baseDatos;
     private MongoClient mongoClient;
 
     public Conexion() {
@@ -34,7 +34,7 @@ public class Conexion {
         return this.baseDatos;
     }
 
-    public MongoCollection<Document> getColeccion(String nombreColeccion) {
+    public static  MongoCollection<Document> getColeccion(String nombreColeccion) {
         return baseDatos.getCollection(nombreColeccion);
     }
 
