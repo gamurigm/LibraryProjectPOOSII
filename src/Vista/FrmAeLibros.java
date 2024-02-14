@@ -4,6 +4,7 @@
  */
 package Vista;
 
+import Vista.FrmAdminLogin;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

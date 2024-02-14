@@ -25,6 +25,25 @@ public class LibroDAO {
         Document nuevoDato = new Document("$set", convertirLibroADocumento(libro));
         coleccionLibros.updateOne(filtro, nuevoDato);
     }
+    
+    public void modificarLibro(String tituloAntiguo, String autorAntiguo, String generoAntiguo, String nuevoTitulo, String nuevoAutor, String nuevoGenero) {
+    // Buscar el libro a modificar
+    Document filtro = new Document("titulo", tituloAntiguo)
+                        .append("autor", autorAntiguo)
+                        .append("genero", generoAntiguo);
+
+    Document libroExistente = coleccionLibros.find(filtro).first();
+
+    if (libroExistente != null) {
+        // Crear un nuevo documento con los nuevos datos
+        Document nuevoDato = new Document("$set", new Document("titulo", nuevoTitulo)
+                                                    .append("autor", nuevoAutor)
+                                                    .append("genero", nuevoGenero));
+
+        // Actualizar el libro en la base de datos
+        coleccionLibros.updateOne(filtro, nuevoDato);
+    }
+}
 
     public void eliminarLibro(String titulo) {
         Document filtro = new Document("titulo", titulo);
