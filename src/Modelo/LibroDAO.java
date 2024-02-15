@@ -3,9 +3,11 @@ package Modelo;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
-
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import org.bson.types.ObjectId;
 
 public class LibroDAO {
 
@@ -27,7 +29,6 @@ public class LibroDAO {
     }
     
     public void modificarLibro(String tituloAntiguo, String autorAntiguo, String generoAntiguo, String nuevoTitulo, String nuevoAutor, String nuevoGenero) {
-    // Buscar el libro a modificar
     Document filtro = new Document("titulo", tituloAntiguo)
                         .append("autor", autorAntiguo)
                         .append("genero", generoAntiguo);
@@ -35,12 +36,11 @@ public class LibroDAO {
     Document libroExistente = coleccionLibros.find(filtro).first();
 
     if (libroExistente != null) {
-        // Crear un nuevo documento con los nuevos datos
+  
         Document nuevoDato = new Document("$set", new Document("titulo", nuevoTitulo)
                                                     .append("autor", nuevoAutor)
                                                     .append("genero", nuevoGenero));
 
-        // Actualizar el libro en la base de datos
         coleccionLibros.updateOne(filtro, nuevoDato);
     }
 }
@@ -79,7 +79,9 @@ public class LibroDAO {
         return libro;
     }
     
-        public List<Libro> buscarLibros(String nombre, String autor, String genero, String codigo) {
+      
+
+    public List<Libro> buscarLibros(String nombre, String autor, String genero, String codigo) {
         List<Libro> resultados = new ArrayList<>();
 
         try {
@@ -87,12 +89,17 @@ public class LibroDAO {
             if (!nombre.isEmpty()) query.append("titulo", new Document("$regex", nombre));
             if (!autor.isEmpty()) query.append("autor", new Document("$regex", autor));
             if (!genero.isEmpty()) query.append("genero", new Document("$regex", genero));
-            if (!codigo.isEmpty()) query.append("codigo", Integer.parseInt(codigo));
+            if (!codigo.isEmpty()) query.append("codigo", Integer.valueOf(codigo));
 
             try (MongoCursor<Document> cursor = coleccionLibros.find(query).iterator()) {
                 while (cursor.hasNext()) {
                     Document libroDoc = cursor.next();
                     Libro libro = documentoToLibro(libroDoc);
+
+                    // Obtener el _id y establecerlo en el Libro
+                    ObjectId mongoId = libroDoc.getObjectId("_id");
+                    libro.setMongoId(mongoId);
+
                     resultados.add(libro);
                 }
             }
@@ -102,4 +109,14 @@ public class LibroDAO {
 
         return resultados;
     }
+
+    public void mostrarResultadosEnTabla(List<Libro> resultados, JTable tablaMostrar) {
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(new Object[]{"NOMBRE", "AUTOR", "GENERO", "CODIGO"});
+
+        for (Libro libro : resultados) {
+            model.addRow(new Object[]{libro.getTitulo(), libro.getAutor(), libro.getGenero(), libro.getMongoId()});
+        }
+        tablaMostrar.setModel(model);
+    }     
 }

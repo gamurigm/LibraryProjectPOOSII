@@ -2,23 +2,14 @@ package Vista;
 
 import Modelo.Conexion;
 import Modelo.Libro;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import org.bson.Document;
 
-/**
- *
- * @author alejo
- */
+/* @author alejo */
+
 public class FrmBusquedaLibro extends javax.swing.JFrame {
 
     public FrmBusquedaLibro() {
@@ -41,6 +32,7 @@ public class FrmBusquedaLibro extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaMostrar = new javax.swing.JTable();
         btnReservar = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -110,27 +102,28 @@ public class FrmBusquedaLibro extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNombre)
-                            .addComponent(txtAutor)
-                            .addComponent(txtGenero)
-                            .addComponent(txtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(174, 174, 174)
-                        .addComponent(btnBuscar)
-                        .addGap(65, 65, 65)
-                        .addComponent(btnReservar)))
-                .addContainerGap(71, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtNombre)
+                                    .addComponent(txtAutor)
+                                    .addComponent(txtGenero)
+                                    .addComponent(txtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(170, 170, 170)
+                                .addComponent(btnBuscar)
+                                .addGap(69, 69, 69)
+                                .addComponent(btnReservar)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,14 +145,24 @@ public class FrmBusquedaLibro extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnBuscar)
-                    .addComponent(btnReservar))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(btnReservar))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscar)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        btnRegresar.setText("REGRESAR");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -169,20 +172,25 @@ public class FrmBusquedaLibro extends javax.swing.JFrame {
                 .addContainerGap(27, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addContainerGap()
+                .addComponent(btnRegresar)
+                .addGap(2, 2, 2)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservarActionPerformed
-        // TODO add your handling code here:
+
         int selectedRow = tablaMostrar.getSelectedRow();
 
     if (selectedRow != -1) {
@@ -195,85 +203,34 @@ public class FrmBusquedaLibro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReservarActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-        // TODO add your handling code here:
+   
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void txtAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAutorActionPerformed
-        // TODO add your handling code here:
+    
     }//GEN-LAST:event_txtAutorActionPerformed
 
     private void txtGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeneroActionPerformed
-        // TODO add your handling code here:
+      
     }//GEN-LAST:event_txtGeneroActionPerformed
 
     private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
-        // TODO add your handling code here:
+      
     }//GEN-LAST:event_txtCodigoActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-//        // TODO add your handling code here:
-//            String nombre = txtNombre.getText().trim();
-//    String autor = txtAutor.getText().trim();
-//    String genero = txtGenero.getText().trim();
-//    String codigo = txtCodigo.getText().trim();
-//
-//    // Lógica para buscar libros
-//    List<Libro> resultados = buscarLibros(nombre, autor, genero, codigo);
-//
-//    // Mostrar los resultados en la JTable
-//    mostrarResultadosEnTabla(resultados);
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    
-    private List<Libro> buscarLibros(String nombre, String autor, String genero, String codigo) {
-    List<Libro> resultados = new ArrayList<>();
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+       
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
-    try {
-        MongoCollection<Document> collection = Conexion.getColeccion("Libros"); 
-
-        Document query = new Document();
-        if (!nombre.isEmpty()) query.append("nombre", new Document("$regex", nombre));
-        if (!autor.isEmpty()) query.append("autor", new Document("$regex", autor));
-        if (!genero.isEmpty()) query.append("genero", new Document("$regex", genero));
-        if (!codigo.isEmpty()) query.append("codigo", Integer.parseInt(codigo));
-
-        try (MongoCursor<Document> cursor = collection.find(query).iterator()) {
-            while (cursor.hasNext()) {
-                Document libroDoc = cursor.next();
-                Libro libro = new Libro(
-                        libroDoc.getString("nombre"),
-                        libroDoc.getString("autor"),
-                        libroDoc.getString("genero")
-                );
-                libro.setDisponible(libroDoc.getBoolean("disponible"));
-                libro.setStock(libroDoc.getInteger("stock", 0));
-                resultados.add(libro);
-            }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-
-    return resultados;
-}
-
-public void mostrarResultadosEnTabla(List<Libro> resultados) {
-    DefaultTableModel model = new DefaultTableModel();
-    model.setColumnIdentifiers(new Object[]{"NOMBRE", "AUTOR", "GENERO", "CODIGO"});
-
-    for (Libro libro : resultados) {
-        model.addRow(new Object[]{libro.getTitulo(), libro.getAutor(), libro.getGenero(), libro.getId()});
-    }
-
-    tablaMostrar.setModel(model);
-}
 
     private void reservarLibro(int libroId) {
     try {
-        MongoCollection<Document> collection = Conexion.getColeccion("Libros"); // Ajusta el nombre de la colección según tu caso
-
-        // Buscar el libro por su ID
-        Document query = new Document("_id", libroId); // Asumiendo que el ID del libro está en la clave "_id"
+        MongoCollection<Document> collection = Conexion.getColeccion("Libros"); 
+        Document query = new Document("_id", libroId);
         try (MongoCursor<Document> cursor = collection.find(query).iterator()) {
             if (cursor.hasNext()) {
                 Document libroDoc = cursor.next();
@@ -284,9 +241,7 @@ public void mostrarResultadosEnTabla(List<Libro> resultados) {
                 );
 
                 if (libro.estaDisponible()) {
-                    // Actualizar la disponibilidad del libro en la base de datos
                     collection.updateOne(query, new Document("$set", new Document("disponible", false)));
-
                     JOptionPane.showMessageDialog(this, "Libro reservado con éxito.");
                 } else {
                     JOptionPane.showMessageDialog(this, "El libro ya está reservado.");
@@ -295,14 +250,12 @@ public void mostrarResultadosEnTabla(List<Libro> resultados) {
                 JOptionPane.showMessageDialog(this, "Libro no encontrado.");
             }
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
+    } catch (HeadlessException e) {}}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnBuscar;
+    public javax.swing.JButton btnRegresar;
     public javax.swing.JButton btnReservar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

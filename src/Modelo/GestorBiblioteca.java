@@ -52,21 +52,18 @@ public class GestorBiblioteca {
         frmUsuario = new FrmUsuario();
         frmBusquedaLibro = new FrmBusquedaLibro();
 
-        libroDAO = new LibroDAO(conexion.getColeccion("Libros")); // Instancia única de LibroDAO
+        libroDAO = new LibroDAO(Conexion.getColeccion("Libros")); // Instancia única de LibroDAO
 
         ControladorAdmin controladorAdmin = new ControladorAdmin(frmAdminLogin, frmRegistroAdmin, adminDAO);
         ControladorUsuario controladorUsuario = new ControladorUsuario(frmUsuarioLogin, frmUsuario, frmBusquedaLibro, usuarioDAO, libroDAO);
 
         // Lógica para el administrador
         frmBienvenida.btnInitAdmin.addActionListener(e -> mostrarVistaAdmin());
-
         frmAdminLogin.btnRegistrarse.addActionListener(e -> mostrarVistaRegistroAdmin());
 
         // Lógica para el usuario
         frmBienvenida.btnInitUsuario.addActionListener(e -> mostrarVistaUsuario());
-
         frmUsuarioLogin.btnRegistrarse.addActionListener(e -> mostrarVistaRegistroUsuario());
-
         frmBienvenida.setVisible(true);
     }
 
@@ -102,14 +99,10 @@ public class GestorBiblioteca {
 
     public static void iniciarSesionUsuario(String correo, String contrasenia) {
         try {
-            UsuarioDAO usuarioDAO = new UsuarioDAO(conexion.getColeccion("Usuarios"));
+            UsuarioDAO usuarioDAO = new UsuarioDAO(Conexion.getColeccion("Usuarios"));
 
             if (usuarioDAO.autenticarUsuario(correo, contrasenia)) {
-                // Mostrar la ventana de búsqueda de libros
-                FrmBusquedaLibro frmBusquedaLibro = new FrmBusquedaLibro();
                 frmBusquedaLibro.setVisible(true);
-
-                // Cerrar la ventana de bienvenida
                 frmBienvenida.setVisible(false);
             } else {
                 mostrarError("Credenciales incorrectas");

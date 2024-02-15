@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 
+
 public class ControladorUsuario implements ActionListener {
 
     private final FrmUsuarioLogin viewLoginUsuario;
@@ -28,8 +29,8 @@ public class ControladorUsuario implements ActionListener {
         this.viewBusqueda = viewBusqueda;
         this.usuarioDAO = usuarioDAO;
         this.libroDAO = libroDAO; 
+       
         
-
         viewLoginUsuario.btnInicioUser.addActionListener(this);
         viewLoginUsuario.btnRegistrarse.addActionListener(this);
         viewUsuario.btnAceptar.addActionListener(this);
@@ -46,21 +47,22 @@ public class ControladorUsuario implements ActionListener {
         } else if (e.getSource().equals(viewLoginUsuario.btnRegistrarse)) {
             abrirFrmUsuario();
         } else if (e.getSource() == viewBusqueda.btnBuscar) {
-    // Obtener criterios de búsqueda desde los campos de texto del formulario de búsqueda
-    String nombre = viewBusqueda.txtNombre.getText().trim();
-    String autor = viewBusqueda.txtAutor.getText().trim();
-    String genero = viewBusqueda.txtGenero.getText().trim();
-    String codigo = viewBusqueda.txtCodigo.getText().trim();
+        realizarBusqueda();
+        }
+    }
 
-    // Validar que al menos un campo de búsqueda no esté vacío
-    if (nombre.isEmpty() && autor.isEmpty() && genero.isEmpty() && codigo.isEmpty()) {
-        JOptionPane.showMessageDialog(viewBusqueda, "Por favor, ingrese al menos un criterio de búsqueda.", "Campos Vacíos", JOptionPane.WARNING_MESSAGE);
-    } else {
-        // Llamar al método del formulario de búsqueda de libros para realizar la búsqueda
-        List<Libro> resultados = libroDAO.buscarLibros(nombre, autor, genero, codigo);
-        viewBusqueda.mostrarResultadosEnTabla(resultados);
-    }
-    }
+    private void realizarBusqueda() {
+        String nombre = viewBusqueda.txtNombre.getText().trim();
+        String autor = viewBusqueda.txtAutor.getText().trim();
+        String genero = viewBusqueda.txtGenero.getText().trim();
+        String codigo = viewBusqueda.txtCodigo.getText().trim();
+
+        if (nombre.isEmpty() && autor.isEmpty() && genero.isEmpty() && codigo.isEmpty()) {
+            JOptionPane.showMessageDialog(viewBusqueda, "Por favor, ingrese al menos un criterio de búsqueda.", "Campos Vacíos", JOptionPane.WARNING_MESSAGE);
+        } else {
+            List<Libro> resultados = libroDAO.buscarLibros(nombre, autor, genero, codigo);
+            libroDAO.mostrarResultadosEnTabla(resultados, viewBusqueda.tablaMostrar);
+        }
     }
 
     public void registrarUsuario() {
@@ -90,9 +92,8 @@ public class ControladorUsuario implements ActionListener {
     } catch (Exception ex) {
         System.out.println("Error de registro");
         ex.printStackTrace();
+        }
     }
-}
-
 
     private void abrirFrmUsuario() {
         viewUsuario.setVisible(true);
@@ -105,10 +106,9 @@ public class ControladorUsuario implements ActionListener {
 
         if (usuarioDAO.existeUsuario(correoUsuario)) {
             JOptionPane.showMessageDialog(viewLoginUsuario, "Inicio de sesión exitoso");
+            
             GestorBiblioteca.iniciarSesionUsuario(correoUsuario, contraseniaUsuario);
             viewLoginUsuario.setVisible(false);
-
-            // Utilizar la instancia existente de FrmBusquedaLibro
             viewBusqueda.setVisible(true);
 
         } else {
@@ -117,8 +117,6 @@ public class ControladorUsuario implements ActionListener {
     } catch (Exception ex) {
         System.out.println("Error al iniciar sesión");
         ex.printStackTrace();
+        }
     }
-}
-
-
 }

@@ -3,7 +3,7 @@ package Controlador;
 import Modelo.Libro;
 import Modelo.LibroDAO;
 import Vista.FrmAeLibros;
-
+    
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ListSelectionEvent;
@@ -14,8 +14,8 @@ import java.util.List;
 
 public class ControladorLibros implements ActionListener {
 
-    private FrmAeLibros vista;
-    private LibroDAO libroDAO;
+    private final FrmAeLibros vista;
+    private final LibroDAO libroDAO;
     private String libroSeleccionado;
 
     public ControladorLibros(FrmAeLibros vista, LibroDAO libroDAO) {
@@ -26,7 +26,7 @@ public class ControladorLibros implements ActionListener {
         this.vista.getBtnEditar().addActionListener(this);
         this.vista.getBtnMostrar().addActionListener(this);
         this.vista.getJtblDatosLibros().getSelectionModel().addListSelectionListener(new TableSelectionListener());
-        actualizarTabla(); // Actualizar la tabla al inicio
+        actualizarTabla();
     }
 
     private void crearLibro() {
@@ -38,7 +38,7 @@ public class ControladorLibros implements ActionListener {
             libroDAO.agregarLibro(libro);
             JOptionPane.showMessageDialog(vista, "El libro ha sido creado.");
             limpiarCampos();
-            actualizarTabla(); // Actualizar la tabla
+            actualizarTabla(); 
         } else {
             JOptionPane.showMessageDialog(vista, "Todos los campos son obligatorios.");
         }
@@ -50,7 +50,7 @@ public class ControladorLibros implements ActionListener {
             if (confirmacion == JOptionPane.YES_OPTION) {
                 libroDAO.eliminarLibro(libroSeleccionado);
                 JOptionPane.showMessageDialog(vista, "El libro ha sido eliminado.");
-                actualizarTabla(); // Actualizar la tabla
+                actualizarTabla(); 
             }
         } else {
             JOptionPane.showMessageDialog(vista, "Seleccione un libro de la tabla para eliminar.");
@@ -79,9 +79,9 @@ public class ControladorLibros implements ActionListener {
             if (nuevoTitulo.trim().isEmpty() || nuevoAutor.trim().isEmpty() || nuevoGenero.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(vista, "Por favor, completa todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                // Modificar el libro
+             
                 libroDAO.modificarLibro(tituloAntiguo, autorAntiguo, generoAntiguo, nuevoTitulo.trim(), nuevoAutor.trim(), nuevoGenero.trim());
-                actualizarTabla(); // Actualizar la tabla
+                actualizarTabla(); 
             }
         }
     }
@@ -140,7 +140,7 @@ public class ControladorLibros implements ActionListener {
         } else if (e.getSource() == vista.getBtnEditar()) {
             editarLibro();
         } else if (e.getSource() == vista.getBtnMostrar()) {
-            actualizarTabla(); // Actualizar la tabla
+            actualizarTabla(); 
         }
     }
 }

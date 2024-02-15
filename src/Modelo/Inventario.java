@@ -32,6 +32,4 @@ public class Inventario {
         }
     }
 
-    // Otros métodos relacionados con el inventario
-
 }

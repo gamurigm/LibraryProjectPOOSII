@@ -1,12 +1,12 @@
 package Modelo;
 
-//import com.google.gson.Gson;
+import org.bson.types.ObjectId;
 
 public class Libro {
 
     private static int nextId = 1;
-
     private final int id;
+    private ObjectId mongoId;
     private String titulo;
     private String autor;
     private String genero;
@@ -19,6 +19,10 @@ public class Libro {
         this.autor = autor;
         this.genero = genero;
         this.disponible = true;
+    }
+    
+    public ObjectId getMongoId() {
+        return mongoId;
     }
 
     public int getId() {
@@ -43,6 +47,10 @@ public class Libro {
 
     public int getStock() {
         return stock;
+    }
+    
+    public void setMongoId(ObjectId mongoId) {
+        this.mongoId = mongoId;
     }
 
     public void setTitulo(String titulo) {
@@ -92,7 +100,5 @@ public class Libro {
                 "\n\tdisponible: " + disponible +
                 "\n\tstock: " + stock +
                 "\n}\n";
-    }
-
-   
+    } 
 }

@@ -18,7 +18,7 @@ public class Conexion {
             String databaseName = "Biblioteca";
 
             MongoClientURI uri = new MongoClientURI("mongodb+srv://gnuxxx:" + password + "@" + clusterUrl + "/" + databaseName);
-
+            //MongoClientURI uri = new MongoClientURI("mongodb://localhost:27017/" + databaseName);
             mongoClient = new MongoClient(uri);
 
             baseDatos = mongoClient.getDatabase(databaseName);

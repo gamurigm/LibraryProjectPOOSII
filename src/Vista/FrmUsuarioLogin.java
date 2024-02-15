@@ -2,7 +2,6 @@ package Vista;
 
 public class FrmUsuarioLogin extends javax.swing.JFrame {
 
-
     public FrmUsuarioLogin() {
         initComponents();
     }
@@ -123,14 +122,13 @@ public class FrmUsuarioLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtContraLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContraLoginActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_txtContraLoginActionPerformed
 
     private void btnInicioUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioUserActionPerformed
-        // TODO add your handling code here:
+      
     }//GEN-LAST:event_btnInicioUserActionPerformed
 
- 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnInicioUser;
