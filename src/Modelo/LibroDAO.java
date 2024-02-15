@@ -2,6 +2,7 @@ package Modelo;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +110,30 @@ public class LibroDAO {
 
         return resultados;
     }
+    
+     public boolean reservarLibro(String libroId) {
+        try {
+            // Crear el filtro para buscar el libro por su _id
+            Document filtro = new Document("_id", new ObjectId(libroId));
+
+            // Comprobar si el libro está disponible
+            Document libroDoc = coleccionLibros.find(filtro).first();
+            if (libroDoc != null && libroDoc.getBoolean("disponible", false)) {
+                // Actualizar el estado de disponibilidad del libro
+                coleccionLibros.updateOne(filtro, Updates.set("disponible", false));
+
+                // Reserva exitosa
+                return true;
+            } else {
+                // El libro no está disponible
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // Manejo básico de errores
+        }
+    }
+
 
     public void mostrarResultadosEnTabla(List<Libro> resultados, JTable tablaMostrar) {
         DefaultTableModel model = new DefaultTableModel();
@@ -119,4 +144,26 @@ public class LibroDAO {
         }
         tablaMostrar.setModel(model);
     }     
+    
+    public Document obtenerLibroPorId(String libroId) {
+    try {
+        Document filtro = new Document("_id", new ObjectId(libroId));
+        return coleccionLibros.find(filtro).first();
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+    }
+}
+
+    
+    public void actualizarDisponibilidad(String libroId, boolean disponible) {
+    try {
+        Document filtro = new Document("_id", new ObjectId(libroId));
+        Document update = new Document("$set", new Document("disponible", disponible));
+        coleccionLibros.updateOne(filtro, update);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
 }

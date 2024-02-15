@@ -11,6 +11,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class ControladorLibros implements ActionListener {
 
@@ -19,8 +21,8 @@ public class ControladorLibros implements ActionListener {
     private String libroSeleccionado;
 
     public ControladorLibros(FrmAeLibros vista, LibroDAO libroDAO) {
-        this.vista = vista;
         this.libroDAO = libroDAO;
+        this.vista = vista;
         this.vista.getBtnCrear().addActionListener(this);
         this.vista.getBtnEliminar().addActionListener(this);
         this.vista.getBtnEditar().addActionListener(this);
@@ -130,6 +132,29 @@ public class ControladorLibros implements ActionListener {
             }
         }
     }
+    
+    
+
+    public boolean reservarLibro(String libroId) {
+        try {
+
+            Document filtro = new Document("_id", new ObjectId(libroId));
+
+            Document libroDoc = libroDAO.obtenerLibroPorId(libroId);
+            if (libroDoc != null && libroDoc.getBoolean("disponible", false)) {
+                libroDAO.actualizarDisponibilidad(libroId, false);
+
+                return true;
+            } else {
+ 
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; 
+        }
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -141,6 +166,7 @@ public class ControladorLibros implements ActionListener {
             editarLibro();
         } else if (e.getSource() == vista.getBtnMostrar()) {
             actualizarTabla(); 
+        
         }
     }
 }

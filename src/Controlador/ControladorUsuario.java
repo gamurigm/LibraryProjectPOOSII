@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
+import org.bson.types.ObjectId;
 
 
 public class ControladorUsuario implements ActionListener {
@@ -33,6 +34,7 @@ public class ControladorUsuario implements ActionListener {
         
         viewLoginUsuario.btnInicioUser.addActionListener(this);
         viewLoginUsuario.btnRegistrarse.addActionListener(this);
+        viewUsuario.btnRegresar.addActionListener(this);
         viewUsuario.btnAceptar.addActionListener(this);
         viewBusqueda.btnBuscar.addActionListener(this);
         viewBusqueda.btnReservar.addActionListener(this);
@@ -48,8 +50,36 @@ public class ControladorUsuario implements ActionListener {
             abrirFrmUsuario();
         } else if (e.getSource() == viewBusqueda.btnBuscar) {
         realizarBusqueda();
-        }
+        } else if (e.getSource() == viewUsuario.btnRegresar) {
+            volverAInicioSesion();
+        } else if (e.getSource() == viewBusqueda.btnReservar) {
+           realizarReserva();
     }
+    }
+    
+    private void realizarReserva() {
+    // Lógica para reservar el libro seleccionado en la tabla
+    int filaSeleccionada = viewBusqueda.tablaMostrar.getSelectedRow();
+if (filaSeleccionada != -1) {
+    ObjectId objectIdLibroSeleccionado = (ObjectId) viewBusqueda.tablaMostrar.getValueAt(filaSeleccionada, 3);
+    String idLibroSeleccionado = objectIdLibroSeleccionado.toHexString();
+
+        // Realizar reserva utilizando el LibroDAO
+        boolean reservaExitosa = libroDAO.reservarLibro(idLibroSeleccionado);
+
+        if (reservaExitosa) {
+            // Muestra un mensaje indicando la reserva exitosa
+            JOptionPane.showMessageDialog(viewBusqueda, "Reserva exitosa");
+        } else {
+            // Muestra un mensaje indicando que el libro no está disponible
+            JOptionPane.showMessageDialog(viewBusqueda, "El libro no está disponible para reserva", "Libro no disponible", JOptionPane.WARNING_MESSAGE);
+        }
+    } else {
+        // Muestra un mensaje indicando que no se ha seleccionado ningún libro
+        JOptionPane.showMessageDialog(viewBusqueda, "Por favor, seleccione un libro para realizar la reserva", "Libro no seleccionado", JOptionPane.WARNING_MESSAGE);
+    }
+}
+
 
     private void realizarBusqueda() {
         String nombre = viewBusqueda.txtNombre.getText().trim();
@@ -97,6 +127,12 @@ public class ControladorUsuario implements ActionListener {
 
     private void abrirFrmUsuario() {
         viewUsuario.setVisible(true);
+    }
+    
+    private void volverAInicioSesion() {
+      
+        viewLoginUsuario.setVisible(true);
+        viewUsuario.setVisible(false);
     }
 
     public void iniciarSesionUsuario() {
