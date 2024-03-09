@@ -1,12 +1,15 @@
 package Modelo;
 
 import com.google.gson.Gson;
+import com.mongodb.client.MongoCollection;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import org.bson.Document;
 
 public class User {
 
@@ -17,10 +20,15 @@ public class User {
     private String email;
     String password;
     private String creado;
+    private static User usuarioActual;
+    private MongoCollection<Document> historialCollection; 
+    private Historial historial;
 
     public User() {
         this.id = UUID.randomUUID().toString();
         this.creado = LocalDateTime.now().toString();
+         this.historial = Historial.getInstance();
+        
     }
 
     public User(String nombre, String direccion, String telf, String email, String password) {
@@ -31,6 +39,22 @@ public class User {
         this.email = email;
         this.password = password;
         this.creado = LocalDateTime.now().toString();
+        this.historial = Historial.getInstance();
+       
+    }
+    
+    
+    public Historial getHistorial() {
+        return historial;
+    }
+
+  
+    public static User obtenerUsuarioActual() {
+        return usuarioActual;
+    }
+
+    public static void setUsuarioActual(User usuario) {
+        usuarioActual = usuario;
     }
 
     public String getId() {
@@ -92,6 +116,8 @@ public class User {
     protected boolean autenticar(String correo, String pass) {
         return this.email.equals(correo) && this.password.equals(pass);
     }
+    
+   
 
     public String toJson() {
         Gson gson = new Gson();
@@ -159,4 +185,6 @@ public class User {
                 ", creado='" + creado + '\'' +
                 '}';
     }
+
+
 }

@@ -6,6 +6,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
+
+
 public class Conexion {
 
     private static MongoDatabase baseDatos;
@@ -13,7 +15,7 @@ public class Conexion {
 
     public Conexion() {
         try {
-            String password = "789456123g";
+            String password = "789456123";
             String clusterUrl = "cluster0.kurfcc8.mongodb.net";
             String databaseName = "Biblioteca";
 
@@ -44,4 +46,6 @@ public class Conexion {
             System.out.println("Conexion cerrada");
         }
     }
+    
+    
 }

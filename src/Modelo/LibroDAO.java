@@ -2,13 +2,14 @@ package Modelo;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Updates;
 import org.bson.Document;
+import org.bson.types.ObjectId;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import org.bson.types.ObjectId;
 
 public class LibroDAO {
 
@@ -28,23 +29,23 @@ public class LibroDAO {
         Document nuevoDato = new Document("$set", convertirLibroADocumento(libro));
         coleccionLibros.updateOne(filtro, nuevoDato);
     }
-    
+
     public void modificarLibro(String tituloAntiguo, String autorAntiguo, String generoAntiguo, String nuevoTitulo, String nuevoAutor, String nuevoGenero) {
-    Document filtro = new Document("titulo", tituloAntiguo)
-                        .append("autor", autorAntiguo)
-                        .append("genero", generoAntiguo);
+        Document filtro = new Document("titulo", tituloAntiguo)
+                .append("autor", autorAntiguo)
+                .append("genero", generoAntiguo);
 
-    Document libroExistente = coleccionLibros.find(filtro).first();
+        Document libroExistente = coleccionLibros.find(filtro).first();
 
-    if (libroExistente != null) {
-  
-        Document nuevoDato = new Document("$set", new Document("titulo", nuevoTitulo)
-                                                    .append("autor", nuevoAutor)
-                                                    .append("genero", nuevoGenero));
+        if (libroExistente != null) {
 
-        coleccionLibros.updateOne(filtro, nuevoDato);
+            Document nuevoDato = new Document("$set", new Document("titulo", nuevoTitulo)
+                    .append("autor", nuevoAutor)
+                    .append("genero", nuevoGenero));
+
+            coleccionLibros.updateOne(filtro, nuevoDato);
+        }
     }
-}
 
     public void eliminarLibro(String titulo) {
         Document filtro = new Document("titulo", titulo);
@@ -67,7 +68,7 @@ public class LibroDAO {
                 .append("stock", libro.getStock());
     }
 
-    private Libro documentoToLibro(Document documento) {
+    public Libro documentoToLibro(Document documento) {
         String titulo = documento.getString("titulo");
         String autor = documento.getString("autor");
         String genero = documento.getString("genero");
@@ -79,8 +80,6 @@ public class LibroDAO {
 
         return libro;
     }
-    
-      
 
     public List<Libro> buscarLibros(String nombre, String autor, String genero, String codigo) {
         List<Libro> resultados = new ArrayList<>();
@@ -110,19 +109,21 @@ public class LibroDAO {
 
         return resultados;
     }
-    
-     public boolean reservarLibro(String libroId) {
+
+    public boolean reservarLibro(Document libro, Historial historial) {
         try {
             // Crear el filtro para buscar el libro por su _id
-            Document filtro = new Document("_id", new ObjectId(libroId));
+            Document filtro = new Document("_id", libro.getObjectId("_id"));
 
             // Comprobar si el libro está disponible
-            Document libroDoc = coleccionLibros.find(filtro).first();
-            if (libroDoc != null && libroDoc.getBoolean("disponible", false)) {
+            if (libro.getBoolean("disponible", false)) {
                 // Actualizar el estado de disponibilidad del libro
-                coleccionLibros.updateOne(filtro, Updates.set("disponible", false));
+                actualizarDisponibilidad(libro.getObjectId("_id").toHexString(), false);
 
-                // Reserva exitosa
+                User usuarioActual = GestorBiblioteca.getUsuarioActual();
+
+            // Agregar el préstamo al historial
+            historial.agregarPrestamo(libro.getString("titulo"), usuarioActual);
                 return true;
             } else {
                 // El libro no está disponible
@@ -134,6 +135,25 @@ public class LibroDAO {
         }
     }
 
+    public void actualizarDisponibilidad(String libroId, boolean disponible) {
+        try {
+            Document filtro = new Document("_id", new ObjectId(libroId));
+            Document update = new Document("$set", new Document("disponible", disponible));
+            coleccionLibros.updateOne(filtro, update);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Document obtenerLibroPorId(String libroId) {
+        try {
+            Document filtro = new Document("_id", new ObjectId(libroId));
+            return coleccionLibros.find(filtro).first();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public void mostrarResultadosEnTabla(List<Libro> resultados, JTable tablaMostrar) {
         DefaultTableModel model = new DefaultTableModel();
@@ -143,27 +163,5 @@ public class LibroDAO {
             model.addRow(new Object[]{libro.getTitulo(), libro.getAutor(), libro.getGenero(), libro.getMongoId()});
         }
         tablaMostrar.setModel(model);
-    }     
-    
-    public Document obtenerLibroPorId(String libroId) {
-    try {
-        Document filtro = new Document("_id", new ObjectId(libroId));
-        return coleccionLibros.find(filtro).first();
-    } catch (Exception e) {
-        e.printStackTrace();
-        return null;
     }
-}
-
-    
-    public void actualizarDisponibilidad(String libroId, boolean disponible) {
-    try {
-        Document filtro = new Document("_id", new ObjectId(libroId));
-        Document update = new Document("$set", new Document("disponible", disponible));
-        coleccionLibros.updateOne(filtro, update);
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-
 }
